@@ -1,0 +1,22 @@
+[
+  {
+      "__ref": "admin_user",
+      "name": {
+        "first": "Admin",
+        "last": "User"
+      },
+      "email": "admin@keystonejs.com",
+      "password": "admin",
+      "isAdmin": "true"
+  },
+  {
+    "__ref": "jburke",
+    "name" : {
+      "first" : "Johnny",
+      "last" : "Burke"
+    },
+    "email" : "jburke@keystonejs.com",
+    "password" : "password",
+    "isAdmin": "false"
+  }
+]

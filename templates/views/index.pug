@@ -1,0 +1,35 @@
+extends ../layouts/default
+
+block content
+    .row
+        .col-sm-6
+            h1 Keystone Starter Kit
+            p A starter kit for KeystoneJS featuring:
+                ul
+                    li Blog functionality with categories and comments
+                    li User Management including sign up and password reset
+                    li User profile editing page
+                    li Database initialisation using JSON fixture data
+                    li .env file support for application specific environment variables
+                    li Cloudinary image upload
+                    li Updated to use Pug (was Jade)
+            p Based on the KeystoneJS #[a(href="https://github.com/keystonejs/keystone-demo") Demo] and the #[a(href="https://github.com/JedWatson/sydjs-site") Syd.JS] web site
+            hr
+        .col-sm-6
+            .panel.panel-default
+                .panel-heading
+                    h3.panel-title: a(href='/signin') Users
+                .panel-body
+                    p
+                        b Admin User:
+                    p Username <code>admin@keystonejs.com</code>, Password <code>admin</code>
+                    br
+                    p 
+                        b Johnny Burke:
+                    p Username <code>jburke@keystonejs.com</code>, Password <code>password</code>
+                    br
+                    if user
+                        a(href='/admin').btn.btn-default Open Admin UI
+                        a(href='/signout').btn.btn-link Sign out
+                    else
+                        a(href='/signin').btn.btn-default Sign in

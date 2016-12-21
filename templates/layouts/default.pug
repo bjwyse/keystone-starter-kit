@@ -1,0 +1,107 @@
+include ../mixins/flash-messages
+include ../mixins/auth/auth-forms
+
+doctype html
+html
+    head
+        if env === 'production'
+            script.
+                var _sf_startpt=(new Date()).getTime()
+
+        meta(charset="utf-8")
+        meta(name="viewport", content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width")
+
+        title= title || 'Keystone Starter Kit'
+        link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+        link(href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700', rel='stylesheet')
+        link(href="/styles/themes/KeystoneStarterKit.min.css", rel="stylesheet")
+        
+        if user && user.canAccessKeystone
+            link(href="/admin/styles/content/editor.min.css", rel="stylesheet")
+
+        block css
+        block head
+    body
+        nav.navbar.navbar-default.navbar-fixed-top
+            .container
+                .navbar-header
+                    button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar-collapse', aria-expanded='false')
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href='/') KeystoneJS
+                .collapse.navbar-collapse#navbar-collapse
+                    ul.nav.navbar-nav.navbar-left
+                        each link in navLinks
+                            li(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
+                    ul.nav.navbar-nav.navbar-right
+                        if user
+                            li: a(href='/profile') #{user.name.full}
+                            li: a(href='/admin') Admin UI
+                            li: a(href='/signout') Sign Out
+                        else
+                            li: a(href='/signin', data-from=page.path, data-initial='signin').js-auth-trigger Sign in
+                            li: a(href='/join', data-from=page.path).js-auth-trigger Join
+
+        .container
+            //- intro
+            block intro
+            //- messages
+            +flash-messages(messages)
+            //- content
+            block content
+            //- footer
+            .site-footer: .container.text-center
+                p: a(href="https://github.com/bjwyse/keystone-starter-kit", class="github-button", data-count-href="/bjwyse/keystone-starter-kit/stargazers", data-count-api="/repos/bjwyse/keystone-starter-kit#stargazers_count", data-count-aria-label="# stargazers on GitHub") Star on GitHub
+
+        block modal
+        if !user
+            #modal-auth(tabindex="-1", role="dialog", aria-labelledby="signin", aria-hidden="true").modal.fade
+                .modal-dialog
+                    .modal-content
+                        +auth-forms({modal: true, initial: 'signin'})
+
+        script.
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+
+        //- scripts
+        script(src='/js/lib/jquery/jquery-1.10.2.min.js')
+        script(src='/js/lib/bootstrap/collapse.js')
+        script(src='/js/lib/bootstrap/dropdown.js')
+        script(src='/js/lib/bootstrap/modal.js')
+        script.
+            $('body')[0].style.paddingTop = $('.navbar').height() + 30 + 'px';
+
+        if user && user.canAccessKeystone
+            script(src='/admin/js/content/editor.js')
+
+        block page-js
+
+        script(src='/js/ui.js')
+        script(async='', defer='', src='https://buttons.github.io/buttons.js')
+
+        if env === 'production'
+            script.
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+                ga('create', '#{ga_property}', '#{ga_domain}');
+                ga('send', 'pageview');
+            script.
+                var _sf_async_config = { uid: #{chartbeat_property}, domain: '#{chartbeat_domain}', useCanonical: true };
+                (function() {
+                    function loadChartbeat() {
+                        window._sf_endpt = (new Date()).getTime();
+                        var e = document.createElement('script');
+                        e.setAttribute('language', 'javascript');
+                        e.setAttribute('type', 'text/javascript');
+                        e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
+                        document.body.appendChild(e);
+                    };
+                    var oldonload = window.onload;
+                    window.onload = (typeof window.onload != 'function') ?
+                    loadChartbeat : function() { oldonload(); loadChartbeat(); };
+                })();
